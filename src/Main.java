@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class Main{
+public class Main implements ActionListener{
     JFrame f;
     JLabel displayLabel, nameLabel;
     JButton b1, b2, b3;
@@ -9,9 +9,26 @@ public class Main{
     int seconds = 0;
     int minutes = 0;
     int hours = 0;
+    String seconds_string = String.format("%02d", seconds); // to show two numbers in display
+    String minutes_string = String.format("%02d", minutes);
+    String hours_string = String.format("%02d", hours);
+    Timer timer = new Timer(1000, new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+
+            elapsedTime = elapsedTime+1000;
+            hours = (elapsedTime/3600000);
+            minutes = (elapsedTime/60000) % 60;
+            seconds = (elapsedTime/1000) % 60;	//modules don't count 60 or more
+            seconds_string = String.format("%02d", seconds);
+            minutes_string = String.format("%02d", minutes);
+            hours_string = String.format("%02d", hours);
+            displayLabel.setText(hours_string + " : " + minutes_string + " : " + seconds_string);
+
+        }
+    });
 
     Main(){
-//add comment again and again
         f =  new JFrame();
         f.setTitle("Stop watch");
         f.setBounds(500,350,500,300);
@@ -19,6 +36,7 @@ public class Main{
         f.setVisible(true);
         displayLabel = new JLabel();
         displayLabel.setBackground(Color.BLUE);
+        displayLabel.setText(hours_string + " : "+ minutes_string + " : " + seconds_string);
         displayLabel.setBounds(68, 20, 350,50);
         displayLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0, 0, 0)));
         displayLabel.setFont(new Font("Monospaced", Font.BOLD, 22));
@@ -41,12 +59,31 @@ public class Main{
         f.add(b1);
         f.add(b2);
         f.add(b3);
+        b1.addActionListener(this);
+        b2.addActionListener(this);
+        b3.addActionListener(this);
         ImageIcon image = new ImageIcon("D:\\clock.png");
         f.setIconImage(image.getImage());
-
-
-
     }
+
+    public void actionPerformed(ActionEvent event){
+        if (event.getSource()==b1){
+            timer.start();
+        }else if(event.getSource() == b2){
+            timer.stop();
+        }else if(event.getSource() == b3){
+            timer.stop();
+            elapsedTime = 0;
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            seconds_string = String.format("%02d", seconds);
+            minutes_string = String.format("%02d", minutes);
+            hours_string = String.format("%02d", hours);
+            displayLabel.setText(hours_string+" : "+minutes_string+" : "+seconds_string);
+        }
+    }
+
 
     public static void main(String[] args) {
         new Main();
