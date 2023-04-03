@@ -11,7 +11,7 @@ public class Main{
     int hours = 0;
 
     Main(){
-//add comment again
+//add comment again and again
         f =  new JFrame();
         f.setTitle("Stop watch");
         f.setBounds(500,350,500,300);
